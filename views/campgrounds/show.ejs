@@ -1,0 +1,94 @@
+<% layout("layouts/boilerplate") %>
+    <div class="row">
+        <div class="col-6 offset-3">
+            <div id="campgroundCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <%  campground.image.forEach((img, i) => { %>
+                  <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+                    <img src="\uploads\<%= img.filename %>" class="d-block w-100 img-thumbnail" alt="">
+                  </div>
+                  <% }) %>
+                </div>
+                <% if(campground.image.length > 1){ %>
+                <button class="carousel-control-prev" type="button" data-bs-target="#campgroundCarousel" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#campgroundCarousel" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+                <% } %>
+              </div>
+            <div class="card mb-3">
+            
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <%= campground.title %> Campgrounds
+                        <% if(campground.reviews.length) { %>
+                            <% let sum = 0; %>
+                            <% for(let review of campground.reviews){ %>
+                                <% sum +=  review.rating; %>
+                            <% } %>
+                            <% sum = Math.trunc(sum/campground.reviews.length) %>
+                            <p class="starability-result float-end" data-rating="<%= sum %>">
+                                Rated: <%= sum %> stars
+                            </p>
+                        <% } %>
+                    </h5>
+                    <p class="card-text">
+                        <%= campground.description %>
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <%= campground.location %>
+                    </li>
+                    <li class="list-group-item">$<%= campground.price %>/night</li>
+                    <li class="list-group-item">Submitted by <%= campground.author.username %>
+                    </li>
+                </ul>
+                <div class="card-body">
+                    <a class="card-link btn btn-primary" href="/campgrounds/<%= campground._id %>/reviews">Leave a
+                        Review</a>
+                    <% if(currentUser && campground.author.equals(currentUser._id)) { %>
+                        <a class="card-link btn btn-primary" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
+                        <form class="d-inline float-end" method="post"
+                            action="/campgrounds/<%= campground._id %>?_method=delete">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                        <% } %>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-sm btn-secondary" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseReview" aria-expanded="false" aria-controls="collapseReview">
+                        Reviews
+                    </button>
+                    <div class="collapse" id="collapseReview">
+                        <% for(let review of campground.reviews){ %>
+                            <div class="card card-body">
+                                <h5 class="card-title">Rating: <%= review.rating %>
+                                </h5>
+                                <p class="starability-result" data-rating="<%= review.rating %>">
+                                    Rated: <%= review.rating %> stars
+                                </p>
+                                <h6 class="card-subtitle">By: <%= review.author.username %>
+                                </h6>
+                                <P class="card-text">Review: <%= review.body %>
+                                </P>
+                                <% if(currentUser && review.author.equals(currentUser._id)) { %>
+                                    <form method="post"
+                                        action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>?_method=delete">
+                                        <button class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                    <% } %>
+                            </div>
+
+                            <% } %>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>

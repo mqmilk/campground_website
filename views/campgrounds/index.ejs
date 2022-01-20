@@ -1,0 +1,42 @@
+<% layout("layouts/boilerplate") %>
+    <div class="row">
+        <div class="col-8 offset-2 text-center">
+            <h1>All Campgrounds</h1>
+            <a href="/campgrounds/new">Add a New Campground</a>
+                <% for(let campground of campgrounds) { %>
+                    <div class="card my-1">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <img class="card-img img-thumbnail" src="\uploads\<%= campground.image[0].filename  %>" alt="campground image">
+                            </div>
+                            <div class="col-md-7">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <%= campground.title %>
+                                        <% if(campground.reviews.length) { %>
+                                            <% let sum = 0; %>
+                                            <% for(let review of campground.reviews){ %>
+                                                <% sum +=  review.rating; %>
+                                            <% } %>
+                                            <% sum /= campground.reviews.length %>
+                                            <p class="starability-result float-end" data-rating="<%= sum %>">
+                                                Rated: <%= sum %> stars
+                                            </p>
+                                        <% } %>
+                                    </h5>
+                                    <p class="card-text">
+                                        <%= campground.location %>
+                                    </p>
+                                    <p class="card-text">
+                                        <%= campground.description %>
+                                    </p>
+                                    <a href="campgrounds/<%= campground._id %>" class="btn btn-primary">
+                                        View <%= campground.title %>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+        </div>
+    </div>
