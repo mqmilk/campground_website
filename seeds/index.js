@@ -1,5 +1,14 @@
 //insert data into database
+if(process.env.NODE_ENV !== "production"){
+    require("dotenv").config();
+}
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const mapBoxToken = process.env.MAPBOX_TOKEN;
+const geocoder = mbxGeocoding({accessToken: mapBoxToken});
+
 const mongoose = require("mongoose");
+
+
 const cities = require("./cities");
 const {places, descriptors} = require("./seedHelpers");
 
@@ -27,12 +36,17 @@ const sample = array => array[Math.floor(Math.random() * array.length)];
 const seedDB = async() => {
     await Campground.deleteMany({});
     const number = 5;
-    for(let i = 0; i < 20; i++) {
-        let zeroFilled = ("00" + (i%number + 1)).slice(-3);
+    for(let i = 0; i < 2; i++) {
+        const zeroFilled = ("00" + (i%number + 1)).slice(-3);
         const random1000 = Math.floor(Math.random() * 1000);
         const price=Math.floor(Math.random() * 20) + 10;
+        const loc = `${cities[random1000].city}, ${cities[random1000].state}`;
+        const geoData = await geocoder.forwardGeocode({
+            query: loc,
+            limit: 1,
+          }).send();
         const camp = new Campground({
-            location: `${cities[random1000].city}, ${cities[random1000].state}`,
+            location: loc,
             title: `${sample(descriptors)} ${sample(places)}`,
             image: {
                 filename: `${zeroFilled}.png`,
@@ -40,8 +54,10 @@ const seedDB = async() => {
             },
             price: price,
             description: "Good",
+            //Your user ID
             author: "61da11d6a72101e7982ae2a3",
         });
+        camp.geometry = geoData.body.features[0].geometry;
         await camp.save();
     }
 };
