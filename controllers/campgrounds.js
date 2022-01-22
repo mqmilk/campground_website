@@ -1,4 +1,10 @@
 const fs = require('fs');
+
+const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
+const mapBoxToken = process.env.MAPBOX_TOKEN;
+const geocoder = mbxGeocoding({accessToken: mapBoxToken});
+
+
 //require the file which generates the Campground model
 const Campground = require("../models/campground.js");
 
@@ -16,11 +22,17 @@ module.exports.renderNewCamp = (req, res) => {
 module.exports.create = async (req, res) => {
     //even if client site give validation on input, postman can still input empty post
     //if(!Object.keys(req.body).length) throw new ExpressError(400, "Invalid Input Campground Data");
+    const geoData = await geocoder.forwardGeocode({
+        query: req.body.location,
+        limit: 1,
+      }).send();
     const campground = new Campground(req.body);
+    campground.geometry = geoData.body.features[0].geometry;
     campground.image = req.files.map(f => ({filename: f.filename,
         path: f.path}));
     campground.author = req.user._id;
     await campground.save();
+    //console.log(campground);
     req.flash("success", "Successfully made a new campground.")
     res.redirect(`/campgrounds/${campground._id}`);
 };
