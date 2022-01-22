@@ -7,7 +7,9 @@
                     <div class="card my-1">
                         <div class="row">
                             <div class="col-md-5">
+                                <% if(campground.image.length){ %>
                                 <img class="card-img img-thumbnail" src="\uploads\<%= campground.image[0].filename  %>" alt="campground image">
+                                <% } %>
                             </div>
                             <div class="col-md-7">
                                 <div class="card-body">
