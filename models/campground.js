@@ -5,14 +5,24 @@ const Review = require("./review.js");
 
 const campgroundSchema = new Schema({
     title: String,
-    image: [{
-        filename: String,
-        path: String,
-
-    }],
     price: Number,
     location: String,
     description: String,
+    image: [{
+        filename: String,
+        path: String,
+    }],
+    geometry: {
+        type: {
+          type: String, 
+          enum: ['Point'], // 'location.type' must be 'Point'
+          required: true
+        },
+        coordinates: {
+          type: [Number],
+          required: true
+        }
+      },
     author: {
         type: Schema.Types.ObjectId,
         ref: "User",
