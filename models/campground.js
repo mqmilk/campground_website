@@ -3,6 +3,8 @@ const Schema = mongoose.Schema;
 
 const Review = require("./review.js");
 
+const opts = {toJSON: {virtuals:true}}
+
 const campgroundSchema = new Schema({
     title: String,
     price: Number,
@@ -16,11 +18,11 @@ const campgroundSchema = new Schema({
         type: {
           type: String, 
           enum: ['Point'], // 'location.type' must be 'Point'
-          required: true
+          required: true,
         },
         coordinates: {
           type: [Number],
-          required: true
+          required: true,
         }
       },
     author: {
@@ -32,7 +34,11 @@ const campgroundSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: "Review",
         }
-    ]
+    ],
+}, opts);
+
+campgroundSchema.virtual("properties.popUpMarkup").get(function(){
+    return `<a href="/campgrounds/${this._id}">${this.title}</a>`;
 });
 
 
