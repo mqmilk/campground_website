@@ -13,6 +13,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const mongoSanitize = require('express-mongo-sanitize');
 
 //require routers
 const campgroundRoutes = require("./routes/campground.js");
@@ -46,15 +47,19 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 app.use(session({
+    name: "blahblah",
     secret: "THISSHOULDBEBETTERSECRET",
     resave: false,
     saveUninitialized: true,
     cookie: {
+        httpOnly: true,
+        //secure: true, //not working for our localhost website, but for http, should included
         expires: Date.now() + 1000 * 60 * 60 *24 * 7,
         maxAge: 1000 * 60 * 60 *24 * 7,
     }
 }));
 app.use(flash());
+app.use(mongoSanitize());
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
