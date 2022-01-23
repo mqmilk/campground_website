@@ -1,9 +1,9 @@
 <% layout("layouts/boilerplate") %>
 
 
-
+<div class="container d-flex justify-content-center align-items-center">
     <div class="row">
-        <div class="col-5 offset-2">
+        <div class="col-lg-8 order-2 order-lg-1">
             
             
             <div id="campgroundCarousel" class="carousel slide" data-bs-ride="carousel">
@@ -96,17 +96,18 @@
             </div>
 
         </div>
-        <div class="col-3">
-            <div id='map' style='width: 400px; height: 300px;'></div>
+        <div class="col-lg-3 order-1 order-lg-2">
+            <div id='showMap' ></div>
         </div>
     </div>
+</div>
    
 
 
     <script>
 mapboxgl.accessToken = '<%- process.env.MAPBOX_TOKEN %>';
 const map = new mapboxgl.Map({
-    container: 'map', // container ID
+    container: 'showMap', // container ID
     style: 'mapbox://styles/mapbox/streets-v11', // style URL
     center: [<%- campground.geometry.coordinates %>], // starting position [lng, lat]
     zoom: 8// starting zoom
@@ -120,6 +121,7 @@ new mapboxgl.Popup({ offset:25, closeOnClick: false })
 .setHTML(`<h5><%-campground.title %></h5><p><%-campground.location%></p>`)
 .addTo(map);
 
+map.addControl(new mapboxgl.NavigationControl());
 
 </script>
 
