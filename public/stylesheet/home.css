@@ -1,0 +1,6 @@
+main{
+    height:100vh;
+    background-image:url("/uploads/camp.jpg");
+    background-repeat:no-repeat;
+    background-size:cover;
+}
