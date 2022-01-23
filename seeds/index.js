@@ -36,15 +36,12 @@ const sample = array => array[Math.floor(Math.random() * array.length)];
 const seedDB = async() => {
     await Campground.deleteMany({});
     const number = 5;
-    for(let i = 0; i < 2; i++) {
+    for(let i = 0; i < 10; i++) {
         const zeroFilled = ("00" + (i%number + 1)).slice(-3);
         const random1000 = Math.floor(Math.random() * 1000);
         const price=Math.floor(Math.random() * 20) + 10;
-        const loc = `${cities[random1000].city}, ${cities[random1000].state}`;
-        const geoData = await geocoder.forwardGeocode({
-            query: loc,
-            limit: 1,
-          }).send();
+        const ran = cities[random1000];
+        const loc = `${ran.city}, ${ran.state}`;
         const camp = new Campground({
             location: loc,
             title: `${sample(descriptors)} ${sample(places)}`,
@@ -56,8 +53,14 @@ const seedDB = async() => {
             description: "Good",
             //Your user ID
             author: "61da11d6a72101e7982ae2a3",
+            geometry:{
+                type: "Point",
+                coordinates: [
+                    ran.longitude,
+                    ran.latitude,
+                ]
+            },
         });
-        camp.geometry = geoData.body.features[0].geometry;
         await camp.save();
     }
 };
