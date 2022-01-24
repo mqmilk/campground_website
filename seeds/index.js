@@ -35,9 +35,9 @@ const sample = array => array[Math.floor(Math.random() * array.length)];
 
 const seedDB = async() => {
     await Campground.deleteMany({});
-    const number = 5;
-    for(let i = 0; i < 10; i++) {
-        const zeroFilled = ("00" + (i%number + 1)).slice(-3);
+    const number = 2;
+    for(let i = 0; i < 50; i++) {
+        const zeroFilled = ("camp00" + (i%number + 1)).slice(-7);
         const random1000 = Math.floor(Math.random() * 1000);
         const price=Math.floor(Math.random() * 20) + 10;
         const ran = cities[random1000];
@@ -46,8 +46,8 @@ const seedDB = async() => {
             location: loc,
             title: `${sample(descriptors)} ${sample(places)}`,
             image: {
-                filename: `${zeroFilled}.png`,
-                path:`public\\uploads\\${zeroFilled}.png`,
+                filename: `${zeroFilled}.jpg`,
+                path:`public\\uploads\\${zeroFilled}.jpg`,
             },
             price: price,
             description: "Good",
