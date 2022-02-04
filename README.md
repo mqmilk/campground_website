@@ -2,7 +2,7 @@
 ## Technologies:
 - MongoDB & Mongoose for the database
 - Node & Express for the backend
-- Bootstrap5 for the styles
+- Bootstrap5 for the responsive design styles
 - Passport for authentication
 - Mapbox for viewing locations on map
 
