@@ -14,9 +14,11 @@
  - Campground listing
  - Campground clicking on map
  - Authentication and Authorization
+ - Review adding and deleting
 
 
-## Starting the App
+## Starting the App for Development:
 
 - npm install to install all dependencies
+- add .env file in the main file and fill in the variables
 - npm start to run 
