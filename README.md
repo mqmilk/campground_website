@@ -13,7 +13,7 @@
  - Campground showing
  - Campground listing
  - Campground clicking on map
- - Authentication and Authorization
+ - Authentication and authorization
  - Review adding and deleting
 
 
