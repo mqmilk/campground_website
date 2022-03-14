@@ -4,6 +4,8 @@
 - Node & Express for the backend
 - Bootstrap5 for the responsive design styles
 - Passport for authentication
+- Helmet for security
+- JOI for input styling and security
 - Mapbox for viewing locations on map
 
 ## Features:
